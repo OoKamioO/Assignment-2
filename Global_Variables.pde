@@ -7,3 +7,7 @@ float playerY;
 float playerSpd;
 
 Player player1;
+
+Gun pistol;
+
+ArrayList<Gun> Bullets;

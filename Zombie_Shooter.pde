@@ -8,6 +8,8 @@ void setup()
     
     player1 = new Player();
     
+    pistol = new Pistol();
+    
     playerLen = 20;
     playerHei = 20;
    
@@ -20,6 +22,8 @@ void setup()
     buttons[1] = false;
     buttons[2] = false;
     buttons[3] = false;
+    
+    Bullets = new ArrayList<Gun>();
 }
 
 void draw()
@@ -94,4 +98,9 @@ void keyReleased()
      {     
          buttons[3] = false;
      }
+}
+
+void mousePressed()
+{
+    Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
 }
