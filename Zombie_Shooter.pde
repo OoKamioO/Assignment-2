@@ -8,7 +8,7 @@ void setup()
     
     player1 = new Player();
     
-    pistol = new Pistol();
+    //pistol = new Pistol();
     
     playerLen = 20;
     playerHei = 20;
@@ -102,5 +102,5 @@ void keyReleased()
 
 void mousePressed()
 {
-    Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
+    Bullets.add(new Gun(playerX, playerY, playerLen, playerHei));
 }

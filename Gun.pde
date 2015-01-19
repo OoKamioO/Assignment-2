@@ -1,9 +1,9 @@
-abstract public class Gun
+public class Gun
 {
     PVector bullet;
     float bulletSpeed;
   
-    public void Gun(float x, float y, float len, float hei)
+    public Gun(float x, float y, float len, float hei)
     {
        bullet = new PVector(x + len/2, y + hei/2);
        
@@ -14,30 +14,32 @@ abstract public class Gun
     {
         Speed(i, j);
         
-        rect(bullet.x, bullet.y, 5, 5);
+        rect(i, j, 5, 5);
     }
     
     public void Speed(float x, float y)
     {
-       if((pmouseX < this.x) && (pmouseY < this.y))
+       bulletSpeed = 2;
+      
+       if((mouseX < x) && (mouseY < y))
        {
           bullet.x -= bulletSpeed;
           bullet.y -= bulletSpeed;
        }
        
-       if((pmouseX < this.x) && (pmouseY > this.y))
+       if((pmouseX < x) && (pmouseY > y))
        {
           bullet.x -= bulletSpeed;
           bullet.y += bulletSpeed;  
        }
        
-       if((pmouseX > this.x) && (pmouseY < this.y))
+       if((pmouseX > x) && (pmouseY < y))
        {
           bullet.x += bulletSpeed;
           bullet.y -= bulletSpeed; 
        }
        
-       if((pmouseX > this.x) && (pmouseY > this.y))
+       if((pmouseX > x) && (pmouseY > y))
        {
           bullet.x += bulletSpeed;
           bullet.y += bulletSpeed;
