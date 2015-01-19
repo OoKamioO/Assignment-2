@@ -11,3 +11,6 @@ Player player1;
 Gun pistol;
 
 ArrayList<Gun> Bullets;
+
+float mouseXClickCo;
+float mouseYClickCo;

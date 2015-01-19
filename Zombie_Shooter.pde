@@ -1,4 +1,5 @@
 boolean[] buttons;
+boolean fired;
 
 void setup()
 {
@@ -23,6 +24,8 @@ void setup()
     buttons[2] = false;
     buttons[3] = false;
     
+    fired = false;
+   
     Bullets = new ArrayList<Gun>();
 }
 
@@ -51,6 +54,17 @@ void draw()
      if(buttons[3])
      {
          player1.moveRight(playerSpd);
+     }
+     
+     if(fired)
+     {
+        Bullets.add(new Gun(playerX, playerY, playerLen, playerHei));
+        fired = false;
+     }
+     
+     for(int i = 0; i < Bullets.size(); i++)
+     {
+        Bullets.get(i).bulletProjection();
      }
 }
 
@@ -102,5 +116,5 @@ void keyReleased()
 
 void mousePressed()
 {
-    Bullets.add(new Gun(playerX, playerY, playerLen, playerHei));
+    fired = true;
 }

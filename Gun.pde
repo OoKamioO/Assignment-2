@@ -2,50 +2,112 @@ public class Gun
 {
     float bulletX;
     float bulletY;
+    
+    float bulletXSpd;
+    float bulletYSpd;
+    float bulletAngle;
+    
     float bulletSpeed;
+    boolean[] bulletDirection;
+    
+    float mouseXCo;
+    float mouseYCo;
+    
+    float mouseXCCo;
+    float mouseYCCo;
   
     public Gun(float x, float y, float len, float hei)
     {
        bulletX = x + len/2;
        bulletY = y + hei/2;
        
-       Speed(bulletX, bulletY);
+       bulletDirection = new boolean[4];
+       
+       bulletDirection[0] = false;
+       bulletDirection[1] = false;
+       bulletDirection[2] = false;
+       bulletDirection[3] = false;
+       
+       bulletSpeed = 2;
+       
+       mouseXCo = bulletX - mouseX;
+       mouseYCo = bulletY - mouseY;
+       
+       mouseXCCo = mouseX;
+       mouseYCCo = mouseY;
+       
+       bulletAngle = atan(mouseYCo/mouseXCo);
+       bulletXSpd = bulletSpeed*cos(bulletAngle);
+       bulletYSpd = bulletSpeed*sin(bulletAngle);
+       
+       if(bulletXSpd < 0)
+       {
+           bulletXSpd *= -1;
+       }
+       
+       if(bulletYSpd < 0)
+       {
+           bulletYSpd *= -1;
+       }
+       
+       Speed();
+    }
+    
+    public void fire(float i, float j)
+    {
+        Speed();
+    }
+    
+    public void bulletProjection()
+    {
+       if(bulletDirection[0])
+       {
+          bulletX -= bulletXSpd;
+          bulletY -= bulletYSpd;
+       }
+       
+       if(bulletDirection[1])
+       {
+          bulletX -= bulletXSpd;
+          bulletY += bulletYSpd;
+       }
+       
+       if(bulletDirection[2])
+       {
+          bulletX += bulletXSpd;
+          bulletY -= bulletYSpd; 
+       }
+       
+       if(bulletDirection[3])
+       {
+          bulletX += bulletXSpd;
+          bulletY += bulletYSpd;
+       }
        
        fill(0, 255, 0);
        rect(bulletX, bulletY, 5, 5);
     }
     
-    public void fire(float i, float j)
+    public void Speed()
     {
-        Speed(i, j);
-    }
-    
-    public void Speed(float x, float y)
-    {
-       bulletSpeed = 2;
-      
-       if((pmouseX < x) && (pmouseY < y))
+       if((mouseXCCo < bulletX) && (mouseYCCo < bulletY))
        {
-          bulletX -= bulletSpeed;
-          bulletY -= bulletSpeed;
+          bulletDirection[0] = true;
        }
        
-       if((pmouseX < x) && (pmouseY > y))
+       if((mouseXCCo < bulletX) && (mouseYCCo > bulletY))
        {
-          bulletX -= bulletSpeed;
-          bulletY += bulletSpeed;  
+          bulletDirection[1] = true;  
        }
        
-       if((pmouseX > x) && (pmouseY < y))
+       if((mouseXCCo > bulletX) && (mouseYCCo < bulletY))
        {
-          bulletX += bulletSpeed;
-          bulletY -= bulletSpeed; 
+          bulletDirection[2] = true;
        }
        
-       if((pmouseX > x) && (pmouseY > y))
+       if((mouseXCCo > bulletX) && (mouseYCCo > bulletY))
        {
-          bulletX += bulletSpeed;
-          bulletY += bulletSpeed;
+          bulletDirection[3] = true;
        }
     }
     
