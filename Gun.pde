@@ -1,4 +1,4 @@
-public class Gun
+abstract public class Gun
 {
     float bulletX;
     float bulletY;
@@ -15,9 +15,15 @@ public class Gun
     
     float mouseXCCo;
     float mouseYCCo;
+    
+    float bulletLen;
+    float bulletHei;
   
     public Gun(float x, float y, float len, float hei)
     {
+       bulletLen = 5;
+       bulletHei = 5;
+      
        bulletX = x + len/2;
        bulletY = y + hei/2;
        
@@ -85,7 +91,7 @@ public class Gun
        }
        
        fill(0, 255, 0);
-       rect(bulletX, bulletY, 5, 5);
+       rect(bulletX, bulletY, bulletLen, bulletHei);
     }
     
     public void Speed()

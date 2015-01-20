@@ -27,6 +27,7 @@ void setup()
     fired = false;
    
     Bullets = new ArrayList<Gun>();
+    AI = new ArrayList<Enemies>();
 }
 
 void draw()
@@ -58,13 +59,36 @@ void draw()
      
      if(fired)
      {
-        Bullets.add(new Gun(playerX, playerY, playerLen, playerHei));
+        Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
+        AI.add(new Enemies(playerX, playerY, playerLen, playerHei));
         fired = false;
      }
      
      for(int i = 0; i < Bullets.size(); i++)
      {
         Bullets.get(i).bulletProjection();
+        
+        if(Bullets.get(i).bulletX > width + Bullets.get(i).bulletLen)
+        {
+           Bullets.remove(i);
+        }
+        else if(Bullets.get(i).bulletX < 0 - Bullets.get(i).bulletLen)
+        {
+           Bullets.remove(i);
+        }
+        else if(Bullets.get(i).bulletY > height + Bullets.get(i).bulletHei)
+        {
+           Bullets.remove(i);
+        }
+        else if(Bullets.get(i).bulletY < 0 - Bullets.get(i).bulletHei)
+        {
+           Bullets.remove(i);
+        }
+     }
+     
+     for(int i = 0; i < AI.size(); i++)
+     {
+        AI.get(i).enemyMovement(playerX, playerY, playerLen, playerHei);
      }
 }
 
@@ -116,5 +140,5 @@ void keyReleased()
 
 void mousePressed()
 {
-    fired = true;
+     fired = true;
 }
