@@ -1,4 +1,4 @@
-public class Enemies
+abstract public class Enemies
 {
     float enemyX;
     float enemyY;
@@ -15,11 +15,12 @@ public class Enemies
     
     float playerXCo;
     float playerYCo;
-    
-    float mouseXCCo;
-    float mouseYCCo;
   
     int spawnside;
+    
+    public Enemies()
+    {
+    }
   
     public Enemies(float x, float y, float pLen, float pHei)
     {
@@ -53,15 +54,12 @@ public class Enemies
        }
        
        enemyDirection = new boolean[4];
-       
-       enemySpeed = 1;
-       
-       mouseXCCo = mouseX;
-       mouseYCCo = mouseY;
     }
     
     public void enemyMovement(float x, float y, float pLen, float pHei)
     {
+       enemySpeed = 2;
+      
        playerXCo = x + pLen/2;
        playerYCo = y + pHei/2;
        

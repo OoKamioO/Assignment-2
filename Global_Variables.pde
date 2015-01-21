@@ -10,9 +10,12 @@ Player player1;
 
 Gun pistol;
 Enemies zombie;
+Collision collision;
 
 ArrayList<Gun> Bullets;
 ArrayList<Enemies> AI;
 
 float mouseXClickCo;
 float mouseYClickCo;
+
+boolean collided;

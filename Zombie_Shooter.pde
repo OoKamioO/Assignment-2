@@ -9,6 +9,8 @@ void setup()
     
     player1 = new Player();
     
+    collision = new Collision();
+    
     //pistol = new Pistol();
     
     playerLen = 20;
@@ -28,6 +30,8 @@ void setup()
    
     Bullets = new ArrayList<Gun>();
     AI = new ArrayList<Enemies>();
+    
+    collided = false;
 }
 
 void draw()
@@ -60,7 +64,7 @@ void draw()
      if(fired)
      {
         Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
-        AI.add(new Enemies(playerX, playerY, playerLen, playerHei));
+        AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
         fired = false;
      }
      
@@ -68,27 +72,28 @@ void draw()
      {
         Bullets.get(i).bulletProjection();
         
-        if(Bullets.get(i).bulletX > width + Bullets.get(i).bulletLen)
+        collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
+        
+        collided = collision.collisionConnect(Bullets.get(i).bulletX, Bullets.get(i).bulletY, Bullets.get(i).bulletLen, Bullets.get(i).bulletHei);
+        
+        collision = new Collision(Bullets.get(i).bulletX, Bullets.get(i).bulletY, Bullets.get(i).bulletLen, Bullets.get(i).bulletHei);
+        
+        collided = collision.bulletOutOfBounds();
+        
+        if(collided)
         {
-           Bullets.remove(i);
-        }
-        else if(Bullets.get(i).bulletX < 0 - Bullets.get(i).bulletLen)
-        {
-           Bullets.remove(i);
-        }
-        else if(Bullets.get(i).bulletY > height + Bullets.get(i).bulletHei)
-        {
-           Bullets.remove(i);
-        }
-        else if(Bullets.get(i).bulletY < 0 - Bullets.get(i).bulletHei)
-        {
-           Bullets.remove(i);
+            Bullets.remove(i);
         }
      }
      
      for(int i = 0; i < AI.size(); i++)
      {
+        collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
+        
         AI.get(i).enemyMovement(playerX, playerY, playerLen, playerHei);
+        
+        //Checks to see if player touches enemy
+        collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
      }
 }
 
