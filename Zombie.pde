@@ -3,6 +3,10 @@ public class Zombie extends Enemies
       public Zombie(float x, float y, float pLen, float pHei)
       {
          super(x, y, pLen, pHei);
+         
+         enemyPoints = 10;
+         enemyHp = 10;
+         enemyPower = 2;
       }
   
       public void enemyMovement(float x, float y, float pLen, float pHei)
@@ -53,4 +57,9 @@ public class Zombie extends Enemies
          fill(0, 255, 0);
          rect(enemyX, enemyY, enemyLen, enemyHei);
       }
+      
+     public void enemyTakesDamage(float gunDamage)
+     {
+        enemyHp -= gunDamage;
+     }
 }

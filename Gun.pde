@@ -18,6 +18,8 @@ abstract public class Gun
     
     float bulletLen;
     float bulletHei;
+    
+    float gunPower;
   
     public Gun(float x, float y, float len, float hei)
     {
@@ -34,13 +36,27 @@ abstract public class Gun
        bulletDirection[2] = false;
        bulletDirection[3] = false;
        
-       bulletSpeed = 2;
-       
        mouseXCo = bulletX - mouseX;
        mouseYCo = bulletY - mouseY;
        
        mouseXCCo = mouseX;
        mouseYCCo = mouseY;
+       
+       bulletAngle = atan(mouseYCo/mouseXCo);
+       bulletXSpd = bulletSpeed*cos(bulletAngle);
+       bulletYSpd = bulletSpeed*sin(bulletAngle);
+       
+       Speed();
+    }
+    
+    public void fire(float i, float j)
+    {
+        Speed();
+    }
+    
+    public void bulletProjection()
+    {
+       bulletSpeed = 2;
        
        bulletAngle = atan(mouseYCo/mouseXCo);
        bulletXSpd = bulletSpeed*cos(bulletAngle);
@@ -55,17 +71,7 @@ abstract public class Gun
        {
            bulletYSpd *= -1;
        }
-       
-       Speed();
-    }
-    
-    public void fire(float i, float j)
-    {
-        Speed();
-    }
-    
-    public void bulletProjection()
-    {
+      
        if(bulletDirection[0])
        {
           bulletX -= bulletXSpd;
@@ -115,9 +121,5 @@ abstract public class Gun
        {
           bulletDirection[3] = true;
        }
-    }
-    
-    public void Power()
-    {
     }
 }

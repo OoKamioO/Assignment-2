@@ -19,7 +19,8 @@ void setup()
     playerX = width/2 - playerLen/2;
     playerY = height/2 - playerHei/2;
     
-    playerSpd = 3;
+    playerSpd = 2;
+    playerHp = 100;
     
     buttons[0] = false;
     buttons[1] = false;
@@ -32,11 +33,18 @@ void setup()
     AI = new ArrayList<Enemies>();
     
     collided = false;
+    
+    secondsBetweenSpawn = 5;
+    spawnRate = 60 * secondsBetweenSpawn;
 }
 
 void draw()
 {
      background(127);
+     
+     fill(0);
+     text(points, 50, 20);
+     text(playerHp, 50, 40);
      
      fill(0);
      player1.drawPlayer();
@@ -64,26 +72,54 @@ void draw()
      if(fired)
      {
         Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
-        AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
         fired = false;
      }
      
-     for(int i = 0; i < Bullets.size(); i++)
+     for(int i = 0; i< Bullets.size(); i++)
      {
         Bullets.get(i).bulletProjection();
-        
+     }
+     
+     for(int i = 0; i < AI.size(); i++)
+     {
         collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
         
-        collided = collision.collisionConnect(Bullets.get(i).bulletX, Bullets.get(i).bulletY, Bullets.get(i).bulletLen, Bullets.get(i).bulletHei);
-        
-        collision = new Collision(Bullets.get(i).bulletX, Bullets.get(i).bulletY, Bullets.get(i).bulletLen, Bullets.get(i).bulletHei);
-        
-        collided = collision.bulletOutOfBounds();
-        
-        if(collided)
+        if(AI.get(i).enemyHp <= 0)
         {
-            Bullets.remove(i);
+            AI.get(i).enemyDead();
+            AI.remove(i);
         }
+        
+        for(int j = 0; j < Bullets.size(); j++)
+        {
+          //Checks to see if bullet hits enemy
+          collided = collision.collisionConnect(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+          
+          if(collided)
+          {
+              AI.get(i).enemyTakesDamage(Bullets.get(j).gunPower);
+              Bullets.remove(j);
+          }
+          
+          //Checks to see if bullet goes offscreen
+          if(collided == false)
+          {
+             collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+            
+             collided = collision.bulletOutOfBounds();
+            
+             //Removes bullet if it leaves screen
+             if(collided)
+             {
+                 Bullets.remove(j);
+             }
+          }
+        }
+     }
+     
+     if(frameCount % spawnRate == 0)
+     {
+         AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
      }
      
      for(int i = 0; i < AI.size(); i++)
@@ -94,6 +130,11 @@ void draw()
         
         //Checks to see if player touches enemy
         collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
+        
+        if(collided)
+        {
+            AI.get(i).playerTakesDamage();
+        }
      }
 }
 
@@ -145,5 +186,6 @@ void keyReleased()
 
 void mousePressed()
 {
-     fired = true;
+     collision = new Collision(playerX, playerY, playerLen, playerHei);
+     fired = collision.boxCheck();
 }

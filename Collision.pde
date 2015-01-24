@@ -40,6 +40,20 @@ public class Collision
        objYCo2 = yCo + hei;
     }
     
+    public boolean boxCheck()
+    {
+       boolean hit = true;
+      
+       //Checks if mouse is in box
+       if(((mouseY >= objYCo) && (mouseY <= objYCo2)) && 
+       ((mouseX >= objXCo) && (mouseX <= objXCo2)))
+       {
+           hit = false;
+       }
+       
+       return hit;
+    }
+    
     public boolean collisionConnect(float xCo, float yCo, float len, float hei)
     {
        boolean hit = false;

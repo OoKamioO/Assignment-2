@@ -19,3 +19,9 @@ float mouseXClickCo;
 float mouseYClickCo;
 
 boolean collided;
+
+int secondsBetweenSpawn;
+float spawnRate;
+
+int points;
+int playerHp;

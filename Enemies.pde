@@ -18,8 +18,16 @@ abstract public class Enemies
   
     int spawnside;
     
+    float enemyHp;
+    int enemyPoints;
+    int enemyPower;
+    
     public Enemies()
     {
+        enemyX = 0;
+        enemyY = 0;
+        enemyLen = 0;
+        enemyHei = 0;
     }
   
     public Enemies(float x, float y, float pLen, float pHei)
@@ -105,7 +113,42 @@ abstract public class Enemies
        rect(enemyX, enemyY, enemyLen, enemyHei);
     }
     
-    public void Power()
+    public void enemyTakesDamage(float gunDamage)
     {
+       enemyHp -= gunDamage;
+    }
+    
+    public void enemyDead()
+    {
+        points += enemyPoints;
+    }
+    
+    public void playerTakesDamage()
+    {
+        playerHp -= enemyPower;
+        
+        if((enemyX < playerX) && (enemyY < playerY))
+        {
+           enemyX -= 10;
+           enemyY -= 10;
+        }
+       
+        if((enemyX < playerX) && (enemyY > playerY))
+        {
+           enemyX -= 10;
+           enemyY += 10;
+        }
+       
+        if((enemyX > playerX) && (enemyY < playerY))
+        {
+           enemyX += 10;
+           enemyY -= 10;
+        }
+       
+        if((enemyX > playerX) && (enemyY > playerY))
+        {
+           enemyX += 10;
+           enemyY += 10;
+        }
     }
 }
