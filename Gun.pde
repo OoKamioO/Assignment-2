@@ -20,6 +20,8 @@ abstract public class Gun
     float bulletHei;
     
     float gunPower;
+    
+    
   
     public Gun(float x, float y, float len, float hei)
     {

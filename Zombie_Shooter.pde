@@ -3,7 +3,8 @@ boolean fired;
 
 void setup()
 {
-    size(600, 480); 
+    size(800, 580); 
+    
     frameRate(60);
     buttons = new boolean[4];
     
@@ -36,15 +37,14 @@ void setup()
     
     secondsBetweenSpawn = 5;
     spawnRate = 60 * secondsBetweenSpawn;
+    
+    currentBullets = 6;
 }
 
 void draw()
 {
-     background(127);
-     
-     fill(0);
-     text(points, 50, 20);
-     text(playerHp, 50, 40);
+     //Changes background color
+     background(70, 97, 88);
      
      fill(0);
      player1.drawPlayer();
@@ -70,8 +70,13 @@ void draw()
      }
      
      if(fired)
-     {
-        Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
+     {  
+        if(currentBullets > 0)
+        {     
+           Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
+           currentBullets -= 1;
+        }
+        
         fired = false;
      }
      
@@ -136,6 +141,18 @@ void draw()
             AI.get(i).playerTakesDamage();
         }
      }
+     
+     if(currentlyReloading)
+     {
+         if((frameCount >= nextReload) && (currentBullets < maxBullets))
+         {
+              currentBullets = maxBullets;
+              
+              currentlyReloading = false;
+         }
+     }
+     
+     foreground();
 }
 
 void keyPressed()
@@ -186,6 +203,18 @@ void keyReleased()
 
 void mousePressed()
 {
-     collision = new Collision(playerX, playerY, playerLen, playerHei);
-     fired = collision.boxCheck();
+     if(mouseButton == LEFT)
+     {
+        collision = new Collision(playerX, playerY, playerLen, playerHei);
+        fired = collision.boxCheck();
+     }
+     
+     if(mouseButton == RIGHT)
+     {
+        if(currentBullets < maxBullets)
+        {
+            nextReload = frameCount + reloadTime;
+            currentlyReloading = true;
+        }
+     }
 }

@@ -25,3 +25,13 @@ float spawnRate;
 
 int points;
 int playerHp;
+
+boolean currentlyReloading;
+int currentBullets;
+
+float nextReload;
+
+int reloadTime = 3 * 60;
+int maxBullets = 6;
+
+int gunReloadTime;

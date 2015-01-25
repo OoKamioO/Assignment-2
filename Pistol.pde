@@ -1,16 +1,18 @@
 public class Pistol extends Gun
-{
+{  
     public Pistol(float x, float y, float len, float hei)
     {
        super(x, y, len, hei);
        
        gunPower = 5;
+       bulletSpeed = 12;
+       
+       reloadTime = 3 * 60;
+       maxBullets = 6;
     }
     
     public void bulletProjection()
     {
-       bulletSpeed = 12;
-       
        bulletAngle = atan(mouseYCo/mouseXCo);
        bulletXSpd = bulletSpeed*cos(bulletAngle);
        bulletYSpd = bulletSpeed*sin(bulletAngle);

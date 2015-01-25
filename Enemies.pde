@@ -46,19 +46,19 @@ abstract public class Enemies
        if(spawnside == 1)
        {
           enemyX = (float)random(0, width);
-          enemyY = height - enemyHei;
+          enemyY = (height - height/5) - enemyHei;
        }
        
        if(spawnside == 2)
        {
           enemyX = 0;
-          enemyY = (float)random(0, (height - enemyHei));
+          enemyY = (float)random(0, ((height - height/5) - enemyHei));
        }
        
        if(spawnside == 3)
        {
           enemyX = width - enemyLen;
-          enemyY = (float)random(0, (height - enemyHei));
+          enemyY = (float)random(0, ((height - height/5) - enemyHei));
        }
        
        enemyDirection = new boolean[4];
