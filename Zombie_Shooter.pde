@@ -38,7 +38,8 @@ void setup()
     secondsBetweenSpawn = 5;
     spawnRate = 60 * secondsBetweenSpawn;
     
-    currentBullets = 6;
+    currentGunBullets = 6;
+    currentGunAmmo = 10;
 }
 
 void draw()
@@ -71,10 +72,10 @@ void draw()
      
      if(fired)
      {  
-        if(currentBullets > 0)
+        if(currentGunBullets > 0)
         {     
            Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
-           currentBullets -= 1;
+           currentGunBullets -= 1;
         }
         
         fired = false;
@@ -144,9 +145,20 @@ void draw()
      
      if(currentlyReloading)
      {
-         if((frameCount >= nextReload) && (currentBullets < maxBullets))
+         if((frameCount >= nextReload) && (currentGunBullets < maxBullets))
          {
-              currentBullets = maxBullets;
+              reloadedBullets = currentGunAmmo - (maxBullets - currentGunBullets);
+              
+              if(reloadedBullets < 0)
+              {
+                  currentGunAmmo = 0;
+                  currentGunBullets -= reloadedBullets;
+              }
+              else
+              {
+                  currentGunAmmo = reloadedBullets;
+                  currentGunBullets = maxBullets - currentGunBullets;
+              }
               
               currentlyReloading = false;
          }
@@ -211,7 +223,7 @@ void mousePressed()
      
      if(mouseButton == RIGHT)
      {
-        if(currentBullets < maxBullets)
+        if((currentGunBullets < maxBullets) && (currentGunAmmo > 0))
         {
             nextReload = frameCount + reloadTime;
             currentlyReloading = true;

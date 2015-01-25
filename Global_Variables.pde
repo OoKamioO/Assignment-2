@@ -27,7 +27,10 @@ int points;
 int playerHp;
 
 boolean currentlyReloading;
-int currentBullets;
+int reloadedBullets;
+
+int currentGunBullets;
+int currentGunAmmo;
 
 float nextReload;
 

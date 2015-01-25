@@ -9,9 +9,10 @@ public void foreground()
     text(playerHp, 55, (height - height/5) + 30);
     
     text("Bullets: ", 20, (height - height/5) + 50);
-    text(currentBullets, 90, (height - height/5) + 50);
+    text(currentGunBullets, 90, (height - height/5) + 50);
     
     text("Ammo: ", 20, (height - height/5) + 70);
+    text(currentGunAmmo, 90, (height - height/5) + 70);
     
     text("Points: ", 20, (height - height/5) + 105);
     text(points, 85, (height - height/5) + 105);
