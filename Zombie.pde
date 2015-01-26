@@ -4,14 +4,14 @@ public class Zombie extends Enemies
       {
          super(x, y, pLen, pHei);
          
-         enemyPoints = 10;
-         enemyHp = 10;
-         enemyPower = 2;
+         enemyPoints = 10 + round;
+         enemyHp = 10 + (round);
+         enemyPower = 7 + (round * 2);
       }
   
       public void enemyMovement(float x, float y, float pLen, float pHei)
       {
-         enemySpeed = 0.3;
+         enemySpeed = 0.3 + (round * .2);
         
          playerXCo = x + pLen/2;
          playerYCo = y + pHei/2;

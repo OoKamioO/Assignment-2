@@ -5,168 +5,249 @@ void setup()
 {
     size(800, 580); 
     
+    //Sets the framerate of the game
     frameRate(60);
-    buttons = new boolean[4];
     
+    //Initializes the button arrays
+    buttons = new boolean[6];
+    
+    //Initializes the main player
     player1 = new Player();
     
+    //Initializes the collision variable
     collision = new Collision();
     
-    //pistol = new Pistol();
-    
+    //Sets player dimensions
     playerLen = 20;
     playerHei = 20;
    
+    //Sets up initial player coordinates
     playerX = width/2 - playerLen/2;
     playerY = height/2 - playerHei/2;
     
+    //Sets up player stats
     playerSpd = 2;
     playerHp = 100;
     
+    //Starts up the buttons as off
     buttons[0] = false;
     buttons[1] = false;
     buttons[2] = false;
     buttons[3] = false;
     
+    //Menu button
+    buttons[4] = false;
+    
+    //Start game button
+    buttons[5] = false;
+    
+    //Starts off fired as off
     fired = false;
    
+    //Creates arraylist for bullets and zombies
     Bullets = new ArrayList<Gun>();
     AI = new ArrayList<Enemies>();
     
+    //Turns off collision indicator
     collided = false;
     
-    secondsBetweenSpawn = 5;
+    //Sets time between spawn
+    secondsBetweenSpawn = 2;
     spawnRate = 60 * secondsBetweenSpawn;
     
+    //Initial values for gun bullets and max ammo
     currentGunBullets = 6;
-    currentGunAmmo = 10;
+    currentGunAmmo = 100;
+    
+    //Determines if game over screen should appear
+    gameOver = 0;
+    
+    //Variable that limits monsters on screen per round
+    maxEnemies = 6;
+    
+    //Counts the amount of enemy on the screen
+    enemyCounter = 0;
 }
 
 void draw()
 {
-     //Changes background color
-     background(70, 97, 88);
-     
-     fill(0);
-     player1.drawPlayer();
-     
-     if(buttons[0])
+     if((buttons[5] == false) && (gameOver == 0)) //Start screen
      {
-         player1.moveUp(playerSpd);
+          startScreen();
      }
-     
-     if(buttons[1])
+     else if(gameOver == 0) //Game begins
      {
-         player1.moveLeft(playerSpd);
-     }
-     
-     if(buttons[2])
-     {
-         player1.moveDown(playerSpd);
-     }
-     
-     if(buttons[3])
-     {
-         player1.moveRight(playerSpd);
-     }
-     
-     if(fired)
-     {  
-        if(currentGunBullets > 0)
-        {     
-           Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei));
-           currentGunBullets -= 1;
-        }
-        
-        fired = false;
-     }
-     
-     for(int i = 0; i< Bullets.size(); i++)
-     {
-        Bullets.get(i).bulletProjection();
-     }
-     
-     for(int i = 0; i < AI.size(); i++)
-     {
-        collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
-        
-        if(AI.get(i).enemyHp <= 0)
-        {
-            AI.get(i).enemyDead();
-            AI.remove(i);
-        }
-        
-        for(int j = 0; j < Bullets.size(); j++)
-        {
-          //Checks to see if bullet hits enemy
-          collided = collision.collisionConnect(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+       //Changes background color
+       background(70, 97, 88);
+       
+       //Determines player color
+       fill(0);
+       
+       //Draws the player
+       player1.drawPlayer();
+       
+       /*Player motion*/
+       if(buttons[0])
+       {
+           player1.moveUp(playerSpd);
+       }
+       
+       if(buttons[1])
+       {
+           player1.moveLeft(playerSpd);
+       }
+       
+       if(buttons[2])
+       {
+           player1.moveDown(playerSpd);
+       }
+       
+       if(buttons[3])
+       {
+           player1.moveRight(playerSpd);
+       }
+       
+       //Checks to see if a bullet should be fired i.e. if 'fired' variable is true
+       if(fired)
+       {  
+          if(currentGunBullets > 0) //Makes sure you can't shoot more bullets than you have
+          {     
+             Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei)); //Draws the bullet
+             currentGunBullets -= 1; //Deducts bullet
+          }
           
+          fired = false; //Resets fired
+       }
+       
+       //Draws bullet motion
+       for(int i = 0; i< Bullets.size(); i++)
+       {
+          Bullets.get(i).bulletProjection();
+       }
+       
+       for(int i = 0; i < AI.size(); i++)
+       {
+          //New collision that checks against the AI
+          collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
+          
+          //If the AI's HP is less than or equal to zero, the AI is removed
+          if(AI.get(i).enemyHp <= 0)
+          {
+              enemyKilled += 1;
+              AI.get(i).enemyDead();
+              AI.remove(i);
+              
+              //Increases the round if all enemies are killed
+              if(enemyKilled == maxEnemies)
+              {
+                 enemyKilled = 0; //Counts enemies killed
+                 enemyCounter = 0; //Counts enemies spawned
+                 maxEnemies += 2; //Increases maximum number of enemies on the screen
+                 round += 1; //Increases the round
+              }
+          }
+          
+          for(int j = 0; j < Bullets.size(); j++)
+          {
+            //Checks to see if bullet hits enemy
+            collided = collision.collisionConnect(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+            
+            if(collided)
+            {
+                AI.get(i).enemyTakesDamage(Bullets.get(j).gunPower);
+                Bullets.remove(j);
+            }
+            
+            //Checks to see if bullet goes offscreen
+            if(collided == false)
+            {
+               collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+              
+               collided = collision.bulletOutOfBounds();
+              
+               //Removes bullet if it leaves screen
+               if(collided)
+               {
+                   Bullets.remove(j);
+               }
+            }
+          }
+       }
+     
+       //Spawns an enemy at the spawn rate and limits the spawn to maximum enemy variable
+       if((frameCount % spawnRate == 0) && (enemyCounter < maxEnemies))
+       {
+           AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
+           enemyCounter += 1;
+       }
+       
+       for(int i = 0; i < AI.size(); i++)
+       {
+          collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
+        
+          //Increaments enemy position towards the player  
+          AI.get(i).enemyMovement(playerX, playerY, playerLen, playerHei);
+          
+          //Checks to see if player touches enemy
+          collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
+          
+          //Takes enemy HP away if they collided
           if(collided)
           {
-              AI.get(i).enemyTakesDamage(Bullets.get(j).gunPower);
-              Bullets.remove(j);
+              AI.get(i).playerTakesDamage();
           }
-          
-          //Checks to see if bullet goes offscreen
-          if(collided == false)
-          {
-             collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
-            
-             collided = collision.bulletOutOfBounds();
-            
-             //Removes bullet if it leaves screen
-             if(collided)
-             {
-                 Bullets.remove(j);
-             }
-          }
-        }
-     }
+       }
+       
+       //Reloads bullets
+       if(currentlyReloading)
+       {
+           //If the framecount is greater than the time specified when the reload button was pressed and the player has enough bullets, they will reload
+           if((frameCount >= nextReload) && (currentGunBullets < maxBullets))
+           {
+                reloadedBullets = currentGunAmmo - (maxBullets - currentGunBullets);
+                
+                if(reloadedBullets < 0)
+                {
+                    currentGunAmmo = 0;
+                    currentGunBullets -= reloadedBullets;
+                }
+                else
+                {
+                    currentGunAmmo = reloadedBullets;
+                    currentGunBullets = maxBullets - currentGunBullets;
+                }
+                
+                currentlyReloading = false;
+           }
+       }
+       
+       //Draws foregronud
+       foreground();
+       
+       //Determines if the player has died
+       if(playerHp <= 0)
+       {
+           gameOver = 1;
+           buttons[5] = false;
+       }
+     }//End main game
      
-     if(frameCount % spawnRate == 0)
-     {
-         AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
-     }
      
-     for(int i = 0; i < AI.size(); i++)
+     //Determines if game over has been reached
+     if(gameOver == 1)
      {
-        collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
-        
-        AI.get(i).enemyMovement(playerX, playerY, playerLen, playerHei);
-        
-        //Checks to see if player touches enemy
-        collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
-        
-        if(collided)
-        {
-            AI.get(i).playerTakesDamage();
-        }
-     }
-     
-     if(currentlyReloading)
-     {
-         if((frameCount >= nextReload) && (currentGunBullets < maxBullets))
+         //Draws the end screen
+         endScreen();
+         
+         //Restarts the game when button[5] (i.e. f) is pressed
+         if(buttons[5] == true)
          {
-              reloadedBullets = currentGunAmmo - (maxBullets - currentGunBullets);
-              
-              if(reloadedBullets < 0)
-              {
-                  currentGunAmmo = 0;
-                  currentGunBullets -= reloadedBullets;
-              }
-              else
-              {
-                  currentGunAmmo = reloadedBullets;
-                  currentGunBullets = maxBullets - currentGunBullets;
-              }
-              
-              currentlyReloading = false;
+             setup();
          }
      }
-     
-     foreground();
 }
 
+//Mapping buttons
 void keyPressed()
 {
      if(key == 'w' || key == 'W')
@@ -187,6 +268,16 @@ void keyPressed()
      if(key == 'd' || key == 'D')
      {
          buttons[3] = true;
+     }
+     
+     if(key == 'm' || key == 'M')
+     {
+         buttons[4] = true;
+     }
+     
+     if(key == 'f' || key == 'F')
+     {
+         buttons[5] = true;
      }
 }
 
@@ -211,6 +302,11 @@ void keyReleased()
      {     
          buttons[3] = false;
      }
+     
+     if(key == 'm' || key == 'M')
+     {
+         buttons[4] = false;
+     }
 }
 
 void mousePressed()
@@ -225,7 +321,7 @@ void mousePressed()
      {
         if((currentGunBullets < maxBullets) && (currentGunAmmo > 0))
         {
-            nextReload = frameCount + reloadTime;
+            nextReload = frameCount + reloadTime; //Determines time when bullets are reloaded
             currentlyReloading = true;
         }
      }

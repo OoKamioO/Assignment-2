@@ -9,7 +9,7 @@ public class Collision
     float objXCo2;
     float objYCo2;
     
-    //Player object
+    //Second object
     float obj2XCo;
     float obj2YCo;
     float obj2Len;
@@ -97,6 +97,7 @@ public class Collision
        return hit;
     }
     
+    //Checks to see if bullets are out of bounds
     public boolean bulletOutOfBounds()
     {
         boolean out = false;

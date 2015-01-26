@@ -29,6 +29,8 @@ int playerHp;
 boolean currentlyReloading;
 int reloadedBullets;
 
+int gameOver;
+
 int currentGunBullets;
 int currentGunAmmo;
 
@@ -38,3 +40,9 @@ int reloadTime = 3 * 60;
 int maxBullets = 6;
 
 int gunReloadTime;
+
+int maxEnemies;
+int enemyCounter;
+int enemyKilled;
+
+int round;
