@@ -4,7 +4,7 @@ public class Pistol extends Gun
     {
        super(x, y, len, hei);
        
-       gunPower = 5;
+       gunPower = 5 + (gunPowerUp*2);
        bulletSpeed = 12;
        
        reloadTime = 3 * 60;

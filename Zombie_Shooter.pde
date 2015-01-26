@@ -67,6 +67,18 @@ void setup()
     
     //Counts the amount of enemy on the screen
     enemyCounter = 0;
+    
+    //Sets buy to false
+    confirmBuy = false;
+    
+    //Initial points
+    points = 100000;
+    
+    //Sets initial costs of powerups
+    maxAmmoUpCost = 300;
+    gunPowerUpCost = 400;
+    playerSpeedUpCost = 350;
+    playerMaxHpUpCost = 200;
 }
 
 void draw()
@@ -221,6 +233,17 @@ void draw()
            }
        }
        
+       //Opens up menu screen
+       if(buttons[4])
+       {
+           upgradeMenu();
+           
+           selectPurchase(60, 30, 0);
+           selectPurchase(230, 30, 1);
+           selectPurchase(width/2 + 135, 30, 2);
+           selectPurchase(width/2 + 295, 30, 3);
+       }
+       
        //Draws foregronud
        foreground();
        
@@ -272,7 +295,14 @@ void keyPressed()
      
      if(key == 'm' || key == 'M')
      {
-         buttons[4] = true;
+         if(buttons[4])
+         {
+             buttons[4] = false;
+         }
+         else
+         {
+             buttons[4] = true;
+         }
      }
      
      if(key == 'f' || key == 'F')
@@ -303,18 +333,25 @@ void keyReleased()
          buttons[3] = false;
      }
      
-     if(key == 'm' || key == 'M')
+     /*if(key == 'm' || key == 'M')
      {
          buttons[4] = false;
-     }
+     }*/
 }
 
 void mousePressed()
 {
      if(mouseButton == LEFT)
      {
-        collision = new Collision(playerX, playerY, playerLen, playerHei);
-        fired = collision.boxCheck();
+        if(buttons[4] == false)
+        {
+           collision = new Collision(playerX, playerY, playerLen, playerHei);
+           fired = collision.boxCheck();
+        }
+        else
+        {
+            confirmBuy = true;
+        }
      }
      
      if(mouseButton == RIGHT)

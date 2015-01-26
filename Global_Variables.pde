@@ -5,6 +5,8 @@ float playerX;
 float playerY;
 
 float playerSpd;
+int playerHp;
+float playerMaxHp;
 
 Player player1;
 
@@ -24,7 +26,7 @@ int secondsBetweenSpawn;
 float spawnRate;
 
 int points;
-int playerHp;
+boolean confirmBuy;
 
 boolean currentlyReloading;
 int reloadedBullets;
@@ -40,6 +42,7 @@ int reloadTime = 3 * 60;
 int maxBullets = 6;
 
 int gunReloadTime;
+int maxGunAmmo;
 
 int maxEnemies;
 int enemyCounter;
