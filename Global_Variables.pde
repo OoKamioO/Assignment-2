@@ -52,3 +52,4 @@ int enemyKilled;
 int round;
 
 int powerUpSpawn;
+int enemySpawnType;

@@ -105,30 +105,33 @@ void draw()
        //Draws the player
        player1.drawPlayer();
        
-       for(int i = 0; i < PowerUp.size(); i++)
-       { 
-           PowerUp.get(i).drawPowerUp();
-       }
-       
-       /*Player motion*/
-       if(buttons[0])
+       if(fired == false)
        {
-           player1.moveUp(playerSpd);
-       }
-       
-       if(buttons[1])
-       {
-           player1.moveLeft(playerSpd);
-       }
-       
-       if(buttons[2])
-       {
-           player1.moveDown(playerSpd);
-       }
-       
-       if(buttons[3])
-       {
-           player1.moveRight(playerSpd);
+           for(int i = 0; i < PowerUp.size(); i++)
+           { 
+               PowerUp.get(i).drawPowerUp();
+           }
+           
+           /*Player motion*/
+           if(buttons[0])
+           {
+               player1.moveUp(playerSpd);
+           }
+           
+           if(buttons[1])
+           {
+               player1.moveLeft(playerSpd);
+           }
+           
+           if(buttons[2])
+           {
+               player1.moveDown(playerSpd);
+           }
+           
+           if(buttons[3])
+           {
+               player1.moveRight(playerSpd);
+           }
        }
        
        //Checks to see if a bullet should be fired i.e. if 'fired' variable is true
@@ -218,7 +221,17 @@ void draw()
        //Spawns an enemy at the spawn rate and limits the spawn to maximum enemy variable
        if((frameCount % spawnRate == 0) && (enemyCounter < maxEnemies))
        {
-           AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
+           enemySpawnType = (int)random(0, 100);
+           
+           if(enemySpawnType > 70)
+           {
+              AI.add(new Zombie(playerX, playerY, playerLen, playerHei));
+           }
+           else
+           {
+              AI.add(new FastZombie(playerX, playerY, playerLen, playerHei));
+           }
+           
            enemyCounter += 1;
        }
        
@@ -265,10 +278,11 @@ void draw()
        //Player touches the spawned loot
        for(int i = 0; i < PowerUp.size(); i++)
        {
-           collision = new Collision(PowerUp.get(i).powerX , PowerUp.get(i).powerY, PowerUp.get(i).powerUpLen, PowerUp.get(i).powerUpHei);
+           collision = new Collision(playerX, playerY, playerLen, playerHei);
            
-           //Checks to see if player touches power up
-           collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
+           //Checks to see if power up touches player
+           collided = collision.collisionConnect(PowerUp.get(i).powerX , PowerUp.get(i).powerY, PowerUp.get(i).powerUpLen, PowerUp.get(i).powerUpHei);
+           
            
            if(collided)
            {

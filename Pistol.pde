@@ -51,7 +51,7 @@ public class Pistol extends Gun
           bulletY += bulletYSpd;
        }      
        
-       fill(0, 255, 0);
+       fill(0);
        rect(bulletX, bulletY, bulletLen, bulletHei);
     }
 }
