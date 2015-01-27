@@ -6,7 +6,7 @@ float playerY;
 
 float playerSpd;
 int playerHp;
-float playerMaxHp;
+int playerMaxHp;
 
 Player player1;
 
@@ -16,6 +16,7 @@ Collision collision;
 
 ArrayList<Gun> Bullets;
 ArrayList<Enemies> AI;
+ArrayList<Powerups> PowerUp;
 
 float mouseXClickCo;
 float mouseYClickCo;
@@ -49,3 +50,5 @@ int enemyCounter;
 int enemyKilled;
 
 int round;
+
+int powerUpSpawn;

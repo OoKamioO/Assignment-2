@@ -44,9 +44,10 @@ void setup()
     //Starts off fired as off
     fired = false;
    
-    //Creates arraylist for bullets and zombies
+    //Creates arraylist for bullets, zombies and powerups
     Bullets = new ArrayList<Gun>();
     AI = new ArrayList<Enemies>();
+    PowerUp = new ArrayList<Powerups>();
     
     //Turns off collision indicator
     collided = false;
@@ -74,6 +75,12 @@ void setup()
     //Initial points
     points = 100000;
     
+    //Sets max gun ammo
+    maxGunAmmo = 100;
+    
+    //Sets max Hp
+    playerMaxHp = 100;
+    
     //Sets initial costs of powerups
     maxAmmoUpCost = 300;
     gunPowerUpCost = 400;
@@ -97,6 +104,11 @@ void draw()
        
        //Draws the player
        player1.drawPlayer();
+       
+       for(int i = 0; i < PowerUp.size(); i++)
+       { 
+           PowerUp.get(i).drawPowerUp();
+       }
        
        /*Player motion*/
        if(buttons[0])
@@ -146,6 +158,23 @@ void draw()
           if(AI.get(i).enemyHp <= 0)
           {
               enemyKilled += 1;
+              
+              //Determines the drop to spawn
+              powerUpSpawn = (int)random(0, 100);
+              
+              if(powerUpSpawn < 25)
+              {
+                  PowerUp.add (new Powerups(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei, 0)); //Spawns points
+              }
+              else if(powerUpSpawn < 35)
+              {
+                  PowerUp.add (new Powerups(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei, 1)); //Spawns Hp
+              }
+              else if(powerUpSpawn <= 50)
+              {
+                  PowerUp.add (new Powerups(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei, 2)); //Spawns ammo
+              }             
+              
               AI.get(i).enemyDead();
               AI.remove(i);
               
@@ -230,6 +259,41 @@ void draw()
                 }
                 
                 currentlyReloading = false;
+           }
+       }
+       
+       //Player touches the spawned loot
+       for(int i = 0; i < PowerUp.size(); i++)
+       {
+           collision = new Collision(PowerUp.get(i).powerX , PowerUp.get(i).powerY, PowerUp.get(i).powerUpLen, PowerUp.get(i).powerUpHei);
+           
+           //Checks to see if player touches power up
+           collided = collision.collisionConnect(playerX, playerY, playerLen, playerHei);
+           
+           if(collided)
+           {
+               switch(PowerUp.get(i).powerUpValue)
+               {
+                   case 0:
+                   {
+                      PowerUp.get(i).pointsUp();
+                      break;
+                   }
+                   
+                   case 1:
+                   {
+                      PowerUp.get(i).healthUp();
+                      break;
+                   }
+                   
+                   case 2:
+                   {
+                      PowerUp.get(i).ammoUp();
+                      break;
+                   }
+               }
+               
+               PowerUp.remove(i);
            }
        }
        

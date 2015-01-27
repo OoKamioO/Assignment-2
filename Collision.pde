@@ -121,4 +121,9 @@ public class Collision
         
         return out;
     }
+    
+    public void powerUpCollide()
+    {
+        
+    }
 }
