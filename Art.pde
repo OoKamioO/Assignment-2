@@ -8,12 +8,37 @@ public void foreground()
     text("HP: ", 20, (height - height/5) + 30);
     text(playerHp, 55, (height - height/5) + 30);
     
-    text("Bullets: ", 20, (height - height/5) + 50);
-    text(currentGunBullets, 90, (height - height/5) + 50);
+    if(gun == 1)
+    {
+       text("Bullets: ", 20, (height - height/5) + 50);
+       text(currentGunBullets, 90, (height - height/5) + 50);
     
-    text("Ammo: ", 20, (height - height/5) + 70);
-    text(currentGunAmmo, 90, (height - height/5) + 70);
+       text("Ammo: ", 20, (height - height/5) + 70);
+       text(currentGunAmmo, 90, (height - height/5) + 70);
+       
+       rect(width - 135, (height - height/5) + 40, 40, 40);
     
+       textSize(22);
+       text("Handgun", width - 162, height - 10);
+    }  
+   
+    if(gun == 2)
+    {
+       text("Bullets: ", 20, (height - height/5) + 50);
+       text(currentShotgunBullets, 90, (height - height/5) + 50);
+    
+       text("Ammo: ", 20, (height - height/5) + 70);
+       text(currentShotgunAmmo, 90, (height - height/5) + 70);
+       
+       textSize(22);
+       text("Shotgun", width - 166, height - 10);
+       
+       fill(255, 0, 0);
+       rect(width - 135, (height - height/5) + 40, 40, 40);
+    } 
+     
+    fill(255);
+    textSize(18);
     text("Points: ", 20, (height - height/5) + 105);
     text(points, 85, (height - height/5) + 105);
     
@@ -21,13 +46,9 @@ public void foreground()
     
     text("Weapon", width - 150, (height - height/5) + 25);
     
+    
     textSize(25);
     text(round + 1, width/2 - 30, (height - height/5) + 90);
-    
-    rect(width - 135, (height - height/5) + 40, 40, 40);
-    
-    textSize(22);
-    text("Handgun", width - 162, height - 10);
 }
 
 public void startScreen()

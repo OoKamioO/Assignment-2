@@ -77,10 +77,16 @@ public class Powerups
    public void ammoUp()
    {
         currentGunAmmo += 10;
+        currentShotgunAmmo += 2;
         
         if(currentGunAmmo > (maxGunAmmo + (maxAmmoUp * 5)))
         {
             currentGunAmmo = maxGunAmmo + (maxAmmoUp * 5);
+        }
+        
+        if(currentShotgunAmmo > (maxShotgunAmmo + maxAmmoUp))
+        {
+            currentShotgunAmmo = maxShotgunAmmo + maxAmmoUp;
         }
    }
 }

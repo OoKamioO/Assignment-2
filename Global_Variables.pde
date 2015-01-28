@@ -10,7 +10,6 @@ int playerMaxHp;
 
 Player player1;
 
-Gun pistol;
 Enemies zombie;
 Collision collision;
 
@@ -37,13 +36,18 @@ int gameOver;
 int currentGunBullets;
 int currentGunAmmo;
 
+int currentShotgunBullets;
+int currentShotgunAmmo;
+
 float nextReload;
 
-int reloadTime = 3 * 60;
+int shotgunReloadTime = 3 * 60;
 int maxBullets = 6;
+int maxShotgunBullets = 1;
 
-int gunReloadTime;
+int gunReloadTime = 2 * 60;
 int maxGunAmmo;
+int maxShotgunAmmo;
 
 int maxEnemies;
 int enemyCounter;
@@ -53,3 +57,8 @@ int round;
 
 int powerUpSpawn;
 int enemySpawnType;
+
+int gun;
+int shellCounter = 1;
+
+float nextFired = 0;

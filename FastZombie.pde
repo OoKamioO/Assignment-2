@@ -6,7 +6,7 @@ public class FastZombie extends Enemies
          
          enemyPoints = 10 + round;
          enemyHp = 5 + (round);
-         enemyPower = 2 + (round * 0.3);
+         enemyPower = 2 + (round * 1);
          
          enemyLen = 16;
          enemyHei = 16;
@@ -14,7 +14,7 @@ public class FastZombie extends Enemies
   
       public void enemyMovement(float x, float y, float pLen, float pHei)
       {
-         enemySpeed = 1 + (round * .5);
+         enemySpeed = 0.5 + (round * .4);
         
          playerXCo = x + pLen/2;
          playerYCo = y + pHei/2;

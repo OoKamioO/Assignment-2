@@ -9,7 +9,7 @@ void setup()
     frameRate(60);
     
     //Initializes the button arrays
-    buttons = new boolean[6];
+    buttons = new boolean[7];
     
     //Initializes the main player
     player1 = new Player();
@@ -41,6 +41,9 @@ void setup()
     //Start game button
     buttons[5] = false;
     
+    //Change weapon button
+    buttons[6] = false;
+    
     //Starts off fired as off
     fired = false;
    
@@ -60,6 +63,10 @@ void setup()
     currentGunBullets = 6;
     currentGunAmmo = 100;
     
+    //Starting shotgun ammo
+    currentShotgunBullets = 1;
+    currentShotgunAmmo = 5;
+    
     //Determines if game over screen should appear
     gameOver = 0;
     
@@ -78,8 +85,14 @@ void setup()
     //Sets max gun ammo
     maxGunAmmo = 100;
     
+    //Sets max shotgun ammo
+    maxShotgunAmmo = 5;
+    
     //Sets max Hp
     playerMaxHp = 100;
+    
+    //Sets gun. 1 = handgun, 2 = shotgun
+    gun = 1;
     
     //Sets initial costs of powerups
     maxAmmoUpCost = 300;
@@ -105,45 +118,73 @@ void draw()
        //Draws the player
        player1.drawPlayer();
        
-       if(fired == false)
+       for(int i = 0; i < PowerUp.size(); i++)
+       { 
+           PowerUp.get(i).drawPowerUp();
+       }
+       
+       /*Player motion*/
+       if(buttons[0])
        {
-           for(int i = 0; i < PowerUp.size(); i++)
-           { 
-               PowerUp.get(i).drawPowerUp();
-           }
-           
-           /*Player motion*/
-           if(buttons[0])
-           {
-               player1.moveUp(playerSpd);
-           }
-           
-           if(buttons[1])
-           {
-               player1.moveLeft(playerSpd);
-           }
-           
-           if(buttons[2])
-           {
-               player1.moveDown(playerSpd);
-           }
-           
-           if(buttons[3])
-           {
-               player1.moveRight(playerSpd);
-           }
+           player1.moveUp(playerSpd);
+       }
+       
+       if(buttons[1])
+       {
+           player1.moveLeft(playerSpd);
+       }
+       
+       if(buttons[2])
+       {
+           player1.moveDown(playerSpd);
+       }
+       
+       if(buttons[3])
+       {
+           player1.moveRight(playerSpd);
        }
        
        //Checks to see if a bullet should be fired i.e. if 'fired' variable is true
        if(fired)
        {  
-          if(currentGunBullets > 0) //Makes sure you can't shoot more bullets than you have
+          if((currentGunBullets > 0) && (gun == 1)) //Makes sure you can't shoot more bullets than you have
           {     
              Bullets.add(new Pistol(playerX, playerY, playerLen, playerHei)); //Draws the bullet
              currentGunBullets -= 1; //Deducts bullet
           }
           
-          fired = false; //Resets fired
+          if((currentShotgunBullets > 0) && (gun == 2) && (shellCounter == 3))
+          {
+             Bullets.add(new Shotgun(playerX, playerY, playerLen, playerHei, shellCounter));
+             
+             shellCounter += 1;
+             currentShotgunBullets -= 1;
+          }
+          
+          if((currentShotgunBullets > 0) && (gun == 2) && (shellCounter == 2))
+          {
+             Bullets.add(new Shotgun(playerX, playerY, playerLen, playerHei, shellCounter));
+             
+             shellCounter += 1;
+          }
+          
+          if((currentShotgunBullets > 0) && (gun == 2) && (shellCounter == 1))
+          {
+             Bullets.add(new Shotgun(playerX, playerY, playerLen, playerHei, shellCounter));
+             
+             shellCounter += 1;
+          }
+          
+          if(gun == 1)
+          {
+             fired = false; //Resets fired
+          }
+          
+          if((gun == 2) && (shellCounter == 4))
+          {
+             shellCounter = 1;
+             fired = false;
+          }
        }
        
        //Draws bullet motion
@@ -256,7 +297,7 @@ void draw()
        if(currentlyReloading)
        {
            //If the framecount is greater than the time specified when the reload button was pressed and the player has enough bullets, they will reload
-           if((frameCount >= nextReload) && (currentGunBullets < maxBullets))
+           if((frameCount >= nextReload) && (currentGunBullets < maxBullets) && (gun == 1))
            {
                 reloadedBullets = currentGunAmmo - (maxBullets - currentGunBullets);
                 
@@ -268,7 +309,25 @@ void draw()
                 else
                 {
                     currentGunAmmo = reloadedBullets;
-                    currentGunBullets = maxBullets - currentGunBullets;
+                    currentGunBullets = maxBullets;
+                }
+                
+                currentlyReloading = false;
+           }
+           
+           if((frameCount >= nextReload) && (currentShotgunBullets < maxShotgunBullets) && (gun == 2))
+           {
+                reloadedBullets = currentShotgunAmmo - (maxShotgunBullets - currentShotgunBullets);
+                
+                if(reloadedBullets < 0)
+                {
+                    currentShotgunAmmo = 0;
+                    currentShotgunBullets -= reloadedBullets;
+                }
+                else
+                {
+                    currentShotgunAmmo = reloadedBullets;
+                    currentShotgunBullets = maxShotgunBullets - currentShotgunBullets;
                 }
                 
                 currentlyReloading = false;
@@ -387,6 +446,20 @@ void keyPressed()
      {
          buttons[5] = true;
      }
+     
+     if(key == 'e' || key == 'E')
+     {
+         if(buttons[6])
+         {
+            buttons[6] = false;
+            gun = 1;
+         }
+         else
+         {
+            buttons[6] = true;
+            gun = 2;
+         }
+     }
 }
 
 void keyReleased()
@@ -410,34 +483,40 @@ void keyReleased()
      {     
          buttons[3] = false;
      }
-     
-     /*if(key == 'm' || key == 'M')
-     {
-         buttons[4] = false;
-     }*/
 }
 
 void mousePressed()
 {
      if(mouseButton == LEFT)
      {
-        if(buttons[4] == false)
+        if(frameCount >= nextFired)
         {
-           collision = new Collision(playerX, playerY, playerLen, playerHei);
-           fired = collision.boxCheck();
-        }
-        else
-        {
-            confirmBuy = true;
+            if(buttons[4] == false)
+            {
+                 collision = new Collision(playerX, playerY, playerLen, playerHei);
+                 fired = collision.boxCheck();
+                 
+                 nextFired = frameCount + 30;
+            }
+            else
+            {
+                confirmBuy = true;
+            }
         }
      }
      
      if(mouseButton == RIGHT)
      {
-        if((currentGunBullets < maxBullets) && (currentGunAmmo > 0))
+        if((currentGunBullets < maxBullets) && (currentGunAmmo > 0) && (gun == 1))
         {
-            nextReload = frameCount + reloadTime; //Determines time when bullets are reloaded
-            currentlyReloading = true;
+             nextReload = frameCount + gunReloadTime; //Determines time when bullets are reloaded
+             currentlyReloading = true;
+        }
+        
+        if((currentShotgunBullets < maxShotgunBullets) && (currentGunAmmo > 0) && (gun == 2))
+        {
+             nextReload = frameCount + shotgunReloadTime;
+             currentlyReloading = true;
         }
      }
 }
