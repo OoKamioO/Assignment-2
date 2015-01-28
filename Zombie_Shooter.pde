@@ -214,9 +214,9 @@ void draw()
             if(collided == false)
             {
                collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
-              
+               
                collided = collision.bulletOutOfBounds();
-              
+               
                //Removes bullet if it leaves screen
                if(collided)
                {
