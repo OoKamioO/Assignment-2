@@ -182,8 +182,8 @@ void draw()
           
           if((gun == 2) && (shellCounter == 4))
           {
-             shellCounter = 1;
              fired = false;
+             shellCounter = 1;
           }
        }
        
@@ -197,6 +197,36 @@ void draw()
        {
           //New collision that checks against the AI
           collision = new Collision(AI.get(i).enemyX, AI.get(i).enemyY, AI.get(i).enemyLen, AI.get(i).enemyHei);
+          
+          for(int j = 0; j < Bullets.size(); j++)
+          {
+            //Checks to see if bullet hits enemy
+            collided = collision.collisionConnect(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+            
+            if(collided)
+            {
+                bulletHitPower = Bullets.get(j).gunPower;
+                hitCounter++;
+                Bullets.remove(j);
+            }
+            
+            //Checks to see if bullet goes offscreen
+            if(collided == false)
+            {
+               collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
+              
+               collided = collision.bulletOutOfBounds();
+              
+               //Removes bullet if it leaves screen
+               if(collided)
+               {
+                   Bullets.remove(j);
+               }
+            }
+          }
+          
+          AI.get(i).enemyTakesDamage(bulletHitPower, hitCounter);
+          hitCounter = 0;
           
           //If the AI's HP is less than or equal to zero, the AI is removed
           if(AI.get(i).enemyHp <= 0)
@@ -230,32 +260,6 @@ void draw()
                  maxEnemies += 2; //Increases maximum number of enemies on the screen
                  round += 1; //Increases the round
               }
-          }
-          
-          for(int j = 0; j < Bullets.size(); j++)
-          {
-            //Checks to see if bullet hits enemy
-            collided = collision.collisionConnect(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
-            
-            if(collided)
-            {
-                AI.get(i).enemyTakesDamage(Bullets.get(j).gunPower);
-                Bullets.remove(j);
-            }
-            
-            //Checks to see if bullet goes offscreen
-            if(collided == false)
-            {
-               collision = new Collision(Bullets.get(j).bulletX, Bullets.get(j).bulletY, Bullets.get(j).bulletLen, Bullets.get(j).bulletHei);
-              
-               collided = collision.bulletOutOfBounds();
-              
-               //Removes bullet if it leaves screen
-               if(collided)
-               {
-                   Bullets.remove(j);
-               }
-            }
           }
        }
      

@@ -22,13 +22,13 @@ public class Shotgun extends Gun
        if(counter == 2)
        {
           bulletAngle = atan(mouseYCo/mouseXCo);
-          bulletAngle += TWO_PI/6;
+          bulletAngle += 15;
        }
        
        if(counter == 3)
        {
           bulletAngle = atan(mouseYCo/mouseXCo);
-          bulletAngle = bulletAngle - (TWO_PI/6);
+          bulletAngle = bulletAngle - 15;
        }
        
        bulletXSpd = bulletSpeed*cos(bulletAngle);

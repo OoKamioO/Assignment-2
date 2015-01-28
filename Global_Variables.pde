@@ -62,3 +62,5 @@ int gun;
 int shellCounter = 1;
 
 float nextFired = 0;
+float hitCounter = 0;
+float bulletHitPower = 0;

@@ -123,9 +123,9 @@ abstract public class Enemies
        rect(enemyX, enemyY, enemyLen, enemyHei);
     }
     
-    public void enemyTakesDamage(float gunDamage)
+    public void enemyTakesDamage(float gunDamage, float hits)
     {
-       enemyHp -= gunDamage;
+       enemyHp -= gunDamage*hits;
     }
     
     public void enemyDead()
